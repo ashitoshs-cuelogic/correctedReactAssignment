@@ -6,6 +6,7 @@ import moment from "moment";
 import Input from "../UI/Input/Input";
 import Validator from "validatorjs";
 
+import "../App.css";
 const initialState = {
   success: "",
   error: "",
@@ -175,28 +176,27 @@ class Register extends Component {
           </div>
         ) : null}
         {formElementsArray.map(formElement => (
-          <Fragment>
-            <Input
-              key={formElement.id}
-              label={formElement.id}
-              elementType={formElement.config.elementType}
-              elementConfig={formElement.config.elementConfig}
-              value={formElement.config.value}
-              error={formElement.config.error}
-              changed={event => this.inputChangedHandler(event, formElement.id)}
-            />
-          </Fragment>
+          <Input
+            key={formElement.id}
+            label={formElement.id}
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
+            value={formElement.config.value}
+            error={formElement.config.error}
+            changed={event => this.inputChangedHandler(event, formElement.id)}
+          />
         ))}
-        <button className="btn btn-success" onClick={this.onSubmitRegister}>
-          Register
-        </button>
         <br />
-        or <br />
+        <button
+          className="btn btn-success margin-botton-tp"
+          onClick={this.onSubmitRegister}
+        >
+          Register
+        </button>{" "}
+        or
         <div>
           <span>Already registered </span>
-          <Link style={{ color: "#f4a941", fontWeight: "bold" }} to={"/login"}>
-            Login
-          </Link>
+          <Link to={"/login"}>Login</Link>
           <span> from here</span>
           <br />
         </div>

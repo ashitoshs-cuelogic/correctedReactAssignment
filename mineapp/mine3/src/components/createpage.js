@@ -10,10 +10,52 @@ import FroalaEditor from "react-froala-wysiwyg";
 import { connect } from "react-redux";
 import Spinner from "../UI/Spinner";
 import moment from "moment";
+import Input from "../UI/Input/Input";
+import Validator from "validatorjs";
 
 const initialState = {
   error: "",
-  loading: false
+  loading: false,
+  orderForm: {
+    title: {
+      elementType: "input",
+      elementConfig: {
+        type: "text",
+        name: "title",
+        placeholder: "Title"
+      },
+      value: "",
+      rule: "required",
+      error: ""
+    },
+    content: {
+      elementType: "froalaEditor",
+      elementConfig: {
+        name: "content"
+      },
+      value: "",
+      rule: "required",
+      error: ""
+    },
+    status: {
+      elementType: "select",
+      elementConfig: {
+        options: [
+          {
+            value: "published",
+            displayValue: "Published"
+          },
+          {
+            value: "on_Hold",
+            displayValue: "On Hold"
+          }
+        ]
+      },
+      value: "",
+      rule: "required",
+      error: ""
+    }
+  }
 };
 
 class Createpage extends Component {
@@ -30,43 +72,13 @@ class Createpage extends Component {
       loading: true
     });
 
-    Object.entries(this.props.pageState).forEach(([key, val]) => {
-      if (val == null) delete this.props.pageState[key];
-    });
-
     this.createPageAction();
-    // var key = "pages/" + this.props.pageState.title;
-
-    // fire
-    //   .database()
-    //   .ref(key)
-    //   .set({
-    //     title: this.props.pageState.title,
-    //     content: this.props.pageState.content,
-    //     status: this.props.pageState.status,
-    //     author: localStorage.getItem("authUser"),
-    //     created_on: moment().format(),
-    //     updated_on: moment().format()
-    //   })
-    //   .then(data => {
-    //     this.setState({
-    //       loading: false
-    //     });
-    //     this.props.history.push("/showpages");
-    //   })
-    //   .catch(error => {
-    //     this.setState({
-    //       loading: false,
-    //       error: error
-    //     });
-    //   });
   };
 
   createPageAction = async () => {
     try {
       await this.createPageData();
 
-      this.reset();
       this.setState({
         loading: false
       });
@@ -80,23 +92,58 @@ class Createpage extends Component {
   };
 
   createPageData() {
-    var key = "pages/" + this.props.pageState.title;
-
+    var key = "pages/" + this.state.orderForm.title.value;
     return fire
       .database()
       .ref(key)
       .set({
-        title: this.props.pageState.title,
-        content: this.props.pageState.content,
-        status: this.props.pageState.status,
+        title: this.state.orderForm.title.value,
+        content: this.state.orderForm.content.value,
+        status: this.state.orderForm.status.value,
         author: localStorage.getItem("authUser"),
         created_on: moment().format(),
         updated_on: moment().format()
       });
   }
 
+  inputChangedHandler = (event, inputIdentifier) => {
+    const updatedOrderForm = {
+      ...this.state.orderForm
+    };
+    const updatedFormElement = {
+      ...updatedOrderForm[inputIdentifier]
+    };
+
+    if (inputIdentifier == "content") {
+      updatedFormElement.value = event;
+    } else {
+      updatedFormElement.value = event.target.value;
+    }
+
+    let validation = new Validator(
+      { [inputIdentifier]: updatedFormElement.value },
+      { [inputIdentifier]: updatedFormElement.rule }
+    );
+    if (!validation.passes()) {
+      updatedFormElement.error = validation.errors.first(inputIdentifier);
+    } else {
+      updatedFormElement.error = "";
+    }
+
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    this.setState({ orderForm: updatedOrderForm });
+  };
+
   render() {
     const { error, loading } = this.state;
+    console.log(this.state);
+    const formElementsArray = [];
+    for (let key in this.state.orderForm) {
+      formElementsArray.push({
+        id: key,
+        config: this.state.orderForm[key]
+      });
+    }
 
     let createPage = (
       <div>
@@ -114,75 +161,25 @@ class Createpage extends Component {
                 <p style={{ color: "red" }}>{error.message}</p>
               </div>
             ) : null}
-            <label htmlFor="title"> Title : </label>
-            <input
-              style={{
-                borderRadius: "5px",
-                padding: "5px",
-                width: "25%",
-                marginLeft: "10px"
-              }}
-              type="text"
-              name="title"
-              placeholder=" Title"
-              // value={title}
-              onChange={this.props.onInputChange}
-            />
-            <br />
-            <label htmlFor="content"> Content : </label>
-            <div
-              style={{
-                width: "50%",
-                textAlign: "center",
-                alignContent: "center",
-                marginLeft: "25%",
-                borderRadius: "5px"
-              }}
-            >
-              <FroalaEditor
-                tag="textarea"
-                // model={content}
-                onModelChange={this.props.onModelChange}
-              />
-            </div>
-            <br />
-            <label htmlFor="status"> Status : </label>
-            <select
-              style={{
-                borderRadius: "5px",
-                padding: "5px",
-                width: "15%",
-                backgroundColor: "white",
-                marginLeft: "10px"
-              }}
-              name="status"
-              onChange={this.props.onInputChange}
-            >
-              <option>Select Status</option>
-              <option
-                value="published"
-                // selected={status == "published" ? "selected" : null}
-              >
-                Published
-              </option>
-              <option
-                value="on_Hold"
-                // selected={status == "on_Hold" ? "selected" : null}
-              >
-                On Hold
-              </option>
-            </select>
-            <br />
+            {formElementsArray.map(formElement => (
+              <div>
+                <Input
+                  key={formElement.id}
+                  label={formElement.id}
+                  elementType={formElement.config.elementType}
+                  elementConfig={formElement.config.elementConfig}
+                  value={formElement.config.value}
+                  error={formElement.config.error}
+                  changed={event =>
+                    this.inputChangedHandler(event, formElement.id)
+                  }
+                />
+                <br />
+              </div>
+            ))}
             <hr />
             <button
-              style={{
-                borderRadius: "5px",
-                background: "green",
-                padding: "5px",
-                borderStyle: "none",
-                color: "white",
-                width: "110px"
-              }}
+              className="btn btn-success margin-botton-tp"
               onClick={this.onSubmitCreatepage}
             >
               Create Page
@@ -201,30 +198,31 @@ class Createpage extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    pageState: state.authState
-  };
-};
+// const mapStateToProps = state => {
+//   return {
+//     pageState: state.authState
+//   };
+// };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onInputChange: e =>
-      dispatch({
-        type: "onChange",
-        name: e.target.name,
-        value: e.target.value
-      }),
-    onModelChange: model =>
-      dispatch({
-        type: "onChange",
-        name: "content",
-        value: model
-      })
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     onInputChange: e =>
+//       dispatch({
+//         type: "onChange",
+//         name: e.target.name,
+//         value: e.target.value
+//       }),
+//     onModelChange: model =>
+//       dispatch({
+//         type: "onChange",
+//         name: "content",
+//         value: model
+//       })
+//   };
+// };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Createpage);
+export default Createpage;
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(Createpage);

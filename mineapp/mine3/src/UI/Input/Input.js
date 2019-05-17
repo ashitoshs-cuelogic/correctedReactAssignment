@@ -1,5 +1,10 @@
 import React from "react";
-import classes from "./Input.css";
+// import classes from "./Input.css";
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+import "font-awesome/css/font-awesome.css";
+import FroalaEditor from "react-froala-wysiwyg";
 
 const input = props => {
   let inputElement = null;
@@ -8,11 +13,39 @@ const input = props => {
     case "input":
       inputElement = (
         <input
-          className="form-control"
+          className="form-control "
           {...props.elementConfig}
           value={props.value}
           onChange={props.changed}
         />
+      );
+      break;
+
+    case "froalaEditor":
+      inputElement = (
+        <FroalaEditor
+          className="form-control "
+          {...props.elementConfig}
+          tag="textarea"
+          placeholder="Content"
+          model={props.value}
+          // model={content}
+          onModelChange={props.changed}
+        />
+      );
+      break;
+
+    case "select":
+      inputElement = (
+        <select
+          className="form-control "
+          value={props.value}
+          onChange={props.changed}
+        >
+          {props.elementConfig.options.map(option => (
+            <option value={option.value}>{option.displayValue} </option>
+          ))}
+        </select>
       );
       break;
 

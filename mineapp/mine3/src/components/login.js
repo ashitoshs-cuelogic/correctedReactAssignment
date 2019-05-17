@@ -70,15 +70,16 @@ class Login extends Component {
     });
   }
 
-  validateCredentials() {
+  validateCredentials = () => {
     return fire
       .auth()
       .signInWithEmailAndPassword(
         this.state.orderForm.email.value,
         this.state.orderForm.password.value
       );
-  }
-  successfullLogin() {
+  };
+
+  successfullLogin = () => {
     localStorage.setItem("authUser", this.state.orderForm.email.value);
     this.setState({
       loading: false
@@ -89,7 +90,7 @@ class Login extends Component {
     }
 
     this.props.history.push("/");
-  }
+  };
 
   loginAction = async () => {
     try {
@@ -159,6 +160,7 @@ class Login extends Component {
             changed={event => this.inputChangedHandler(event, formElement.id)}
           />
         ))}
+        <br />
         <button className="btn btn-success" onClick={this.onSubmitLogin}>
           Login
         </button>
@@ -186,12 +188,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onInputChange: e =>
-      dispatch({
-        type: "onChange",
-        name: e.target.name,
-        value: e.target.value
-      }),
+    // onInputChange: e =>
+    //   dispatch({
+    //     type: "onChange",
+    //     name: e.target.name,
+    //     value: e.target.value
+    //   }),
     setIsAuthorised: status => dispatch({ type: "onSetAuthorise", status })
   };
 };

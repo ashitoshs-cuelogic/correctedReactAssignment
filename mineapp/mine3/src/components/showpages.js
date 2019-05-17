@@ -7,7 +7,6 @@ import moment from "moment";
 import { connect } from "react-redux";
 import Spinner from "../UI/Spinner";
 import _ from "lodash";
-// require("dotenv").config();
 
 class ShowPages extends Component {
   constructor(props) {
@@ -20,7 +19,6 @@ class ShowPages extends Component {
       paginationObj: null,
       loading: false
     };
-    // dotenv.load();
   }
 
   onDeleteHandler = (e, title) => {
@@ -148,7 +146,6 @@ class ShowPages extends Component {
   }
 
   render() {
-    // console.log(process.env);
     const paginationObj = this.state.paginationObj;
     if (!paginationObj) {
       return null;
@@ -323,15 +320,14 @@ class ShowPages extends Component {
                       <td>{moment(page.updated_on).format("MM/DD/YYYY")}</td>
                       <td>
                         <Link
-                          style={{ display: "inline" }}
                           to={"editpage/" + page.title}
-                          className="nav-link"
+                          className="nav-link-icon"
                           title="Edit"
                         >
                           <i className="fa fa-edit" aria-hidden="true" />
                         </Link>
                         <Link
-                          style={{ display: "inline" }}
+                          className="nav-link-icon"
                           title="Delete"
                           onClick={e => {
                             if (
@@ -345,9 +341,8 @@ class ShowPages extends Component {
                           <i className="fa fa-trash" aria-hidden="true" />
                         </Link>
                         <Link
-                          style={{ display: "inline" }}
                           to={"/preview/" + page.title}
-                          className="nav-link"
+                          className="nav-link-icon"
                           title="Preview"
                         >
                           <i className="fa fa-eye" aria-hidden="true" />

@@ -23,6 +23,81 @@
   color: #61dafb;
 }
 
+.h2-title {
+  color: green;
+  position: absolute;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.img-logo {
+  width: 95px;
+  height: 95px;
+  float: left;
+  position: static;
+}
+
+.header-div {
+  height: 95px;
+}
+
+.menubar-div {
+  border: 1px solid gray;
+  background: green;
+  border-left: 1px solid gray;
+}
+
+.menubar-ul {
+  list-style-type: none;
+  padding: 5px;
+  margin-bottom: 30px;
+}
+
+.menubar-li {
+  display: inline;
+}
+
+.display-inline {
+  display: inline;
+}
+
+.border-right-grey {
+  border-right: 1px solid gray;
+}
+
+.border-left-grey {
+  border-left: "1px solid gray";
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-link-icon {
+  color: #007bff;
+  margin-left: 5px;
+  text-decoration: none;
+}
+.paddinglarge {
+  padding: 10px;
+}
+
+.padding-5 {
+  padding: 10px;
+}
+
+.margin-botton-tp {
+  margin-botton: 10px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
