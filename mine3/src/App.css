@@ -1,0 +1,186 @@
+.App {
+  text-align: center;
+  background-color: #D3D3D3;
+  /* background-color: black; */
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.h2-title {
+  color: black;
+  position: absolute;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.img-logo {
+  width: 95px;
+  height: 95px;
+  float: left;
+  position: static;
+}
+
+.header-div {
+  height: 95px;
+}
+
+.menubar-div {
+  border: 1px solid gray;
+  background: green;
+  border-left: 1px solid gray;
+}
+
+.menubar-ul {
+  list-style-type: none;
+  padding: 7px;
+  margin-bottom: 35px;
+}
+
+.menubar-li {
+  display: inline;
+  /* margin-bottom:20px; */
+}
+
+.display-inline {
+  display: inline;
+}
+
+.border-right-grey {
+  border-right: 1px solid gray;
+}
+
+.border-left-grey {
+  border-left: "1px solid gray";
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-link-icon {
+  color: #007bff;
+  margin-left: 5px;
+  text-decoration: none;
+}
+.paddinglarge {
+  /* padding: 10px; */
+}
+
+.padding-5 {
+  /* padding: 10px; */
+}
+
+.margin-botton-tp {
+  /* margin-bottom: 10px; */
+}
+
+.menu-container { 
+  width: 100%;
+  height: 100vh;
+  background-color: #D3D3D3;
+}
+
+.clearfix {
+  display: inline-block;
+  width:100%;
+  height: 0px;
+}
+
+/* .active { 
+  font-weight: "bold";
+  color: "green";
+  background-color: "white";
+} */
+
+.border-black {
+  border: 1px solid black;
+}
+
+.search-box {
+  padding: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border-style: none;
+  border: 1px solid gainsboro;
+}
+
+.search-button {
+  padding: 5px;
+  border-radius: 5px;
+  width: 80px;
+  border-style: none;
+  background-color: grey;
+  color: white;
+}
+
+.sp-table {
+  border: 1px solid gainsboro; 
+  border-radius: 10px;
+}
+
+.sp-th {
+  text-decoration: none;
+  color: white;
+}
+
+.sp-rightpanel {
+  width: 21%;
+  padding: 10px;
+  float: right;
+}
+
+.error {
+  color: red
+}
+
+.sp-navright { 
+  width: 15%; 
+  float: right;
+}
+
+.sp-navleft { 
+  width: 80%; 
+  float: left;
+}
+
+.margin-left-5 { 
+  margin-left: 5px
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
