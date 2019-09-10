@@ -13,12 +13,14 @@ class MenuBar extends Component {
     };
   }
 
-  componentWillMount = async () => {
+  componentDidMount = async () => {
     let snapshot = await this.fetchPageData();
-    this.setState({
-      pages: snapshot,
-      loading: false
-    });
+    if (snapshot) {
+      this.setState({
+        pages: snapshot,
+        loading: false
+      });
+    }
   }
 
   logoutHandler = () => {
@@ -40,7 +42,6 @@ class MenuBar extends Component {
           let msg = Object.keys(message || {}).map(key => ({
             ...message[key]
           }));
-
           resolve(msg)
         });
     })
@@ -67,6 +68,7 @@ class MenuBar extends Component {
         sources.push(element);
       }
     });
+
     return (
       this.state.loading ?
         <Spinner />

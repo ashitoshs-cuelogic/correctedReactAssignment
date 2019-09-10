@@ -1,51 +1,17 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import fire from "./../config/firebase";
 import { Link } from "react-router-dom";
 import Spinner from "../UI/Spinner";
 import moment from "moment";
 import Input from "../UI/Input/Input";
 import Validator from "validatorjs";
+import { registerInputConstants } from "../constants/inputConstants";
 
-import "../App.css";
 const initialState = {
   success: "",
   error: "",
-  loading: false,
-  orderForm: {
-    email: {
-      elementType: "input",
-      elementConfig: {
-        type: "email",
-        name: "email",
-        placeholder: "Username"
-      },
-      value: "",
-      rule: "required|email",
-      error: ""
-    },
-    password: {
-      elementType: "input",
-      elementConfig: {
-        type: "password",
-        name: "password",
-        placeholder: "Password"
-      },
-      value: "",
-      rule: "required",
-      error: ""
-    },
-    fullname: {
-      elementType: "input",
-      elementConfig: {
-        type: "text",
-        name: "fullname",
-        placeholder: "Full Name"
-      },
-      value: "",
-      rule: "required",
-      error: ""
-    }
-  }
+  loading: true,
+  orderForm: registerInputConstants
 };
 
 class Register extends Component {
@@ -54,72 +20,6 @@ class Register extends Component {
     this.state = { ...initialState };
   }
 
-  reset() {
-    this.setState(initialState);
-  }
-
-  onSubmitRegister = e => {
-    e.preventDefault();
-    this.setState({
-      loading: true
-    });
-
-    if (
-      !this.state.orderForm.email.value ||
-      !this.state.orderForm.fullname.value ||
-      !this.state.orderForm.password.value
-    ) {
-      return this.setState({
-        error: { message: "Please enter required details" },
-        loading: false
-      });
-    }
-
-    this.registerAction();
-  };
-
-  validateDataWithFireBase() {
-    return fire
-      .auth()
-      .createUserWithEmailAndPassword(
-        this.state.orderForm.email.value,
-        this.state.orderForm.password.value
-      );
-  }
-
-  insertToDatabase() {
-    var key = "users/" + this.state.orderForm.fullname.value;
-    return fire
-      .database()
-      .ref(key)
-      .set({
-        email: this.state.orderForm.email.value,
-        password: this.state.orderForm.password.value,
-        fullname: this.state.orderForm.fullname.value,
-        created_on: moment().format(),
-        updated_on: moment().format()
-      });
-  }
-
-  registerAction = async () => {
-    try {
-      await this.validateDataWithFireBase();
-      await this.insertToDatabase();
-      this.reset();
-      this.setState({ success: "User registered successfully" });
-    } catch (e) {
-      this.setState({
-        error: e,
-        loading: false
-      });
-    }
-  };
-
-  componentWillMount() {
-    this.setState({
-      loading: true
-    });
-  }
   componentDidMount() {
     this.setState({
       loading: false
@@ -149,6 +49,75 @@ class Register extends Component {
     this.setState({ orderForm: updatedOrderForm });
   };
 
+  onSubmitRegister = e => {
+    e.preventDefault();
+    this.setState({
+      loading: true
+    });
+
+    if (
+      !this.state.orderForm.email.value ||
+      !this.state.orderForm.fullname.value ||
+      !this.state.orderForm.password.value
+    ) {
+      return this.setState({
+        error: { message: "Please enter required details" },
+        loading: false
+      });
+    }
+
+    this.registerAction();
+  };
+
+  registerAction = async () => {
+    try {
+      let isValidUser = await this.validateDataWithFireBase();
+      if (isValidUser) {
+        let isInserted = await this.insertToDatabase();
+        if (isInserted) {
+          this.reset();
+          this.setState({ success: "User registered successfully", loading: false });
+        }
+      }
+    } catch (e) {
+      this.setState({
+        error: e,
+        loading: false
+      });
+    }
+  };
+
+  validateDataWithFireBase() {
+    return new Promise((resolve, reject) => {
+      resolve(fire
+        .auth()
+        .createUserWithEmailAndPassword(
+          this.state.orderForm.email.value,
+          this.state.orderForm.password.value
+        ));
+    });
+  }
+
+  insertToDatabase() {
+    let key = "users/" + this.state.orderForm.fullname.value;
+    return new Promise((resolve, reject) => {
+      resolve(fire
+        .database()
+        .ref(key)
+        .set({
+          email: this.state.orderForm.email.value,
+          password: this.state.orderForm.password.value,
+          fullname: this.state.orderForm.fullname.value,
+          created_on: moment().format(),
+          updated_on: moment().format()
+        }) ? true : false);
+    });
+  }
+
+  reset() {
+    this.setState(initialState);
+  }
+
   render() {
     const { success, error, loading } = this.state;
 
@@ -176,11 +145,7 @@ class Register extends Component {
           </div>
         ) : null}
         {formElementsArray.map(formElement => (
-          <div style={{
-            width: "100%",
-            textAlign: "center",
-            alignContent: "center"
-          }}>
+          <div className="registerContainer">
             <Input
               key={formElement.id}
               label={formElement.id}
@@ -192,19 +157,15 @@ class Register extends Component {
             />
           </div>
         ))}
-        <br />
-        <button
-          className="btn btn-success margin-botton-tp"
-          onClick={this.onSubmitRegister}
-        >
+        <div className="clearfix" ></div>
+        <button className="btn btn-success margin-botton-tp" onClick={this.onSubmitRegister} >
           Register
-        </button>{" "}
-        or
-        <div>
+        </button>
+        <div className="clearfix" ></div>
+        <div className="registerContainer">
           <span>Already registered </span>
           <Link to={"/login"}>Login</Link>
           <span> from here</span>
-          <br />
         </div>
       </form>
     );
@@ -213,7 +174,7 @@ class Register extends Component {
       registrationPage = <Spinner />;
     }
 
-    return <Fragment>{registrationPage}</Fragment>;
+    return registrationPage;
   }
 }
 

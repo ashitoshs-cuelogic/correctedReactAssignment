@@ -1,42 +1,26 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import fire from "./../config/firebase";
 import Spinner from "../UI/Spinner";
 import { Link } from "react-router-dom";
 import Input from "../UI/Input/Input";
 import Validator from "validatorjs";
 import { connect } from "react-redux";
+import { loginInputConstants } from "../constants/inputConstants";
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       error: "",
-      loading: false,
-      orderForm: {
-        email: {
-          elementType: "input",
-          elementConfig: {
-            type: "email",
-            name: "email",
-            placeholder: "Username"
-          },
-          value: "",
-          rule: "required|email",
-          error: ""
-        },
-        password: {
-          elementType: "input",
-          elementConfig: {
-            type: "password",
-            name: "password",
-            placeholder: "Password"
-          },
-          value: "",
-          rule: "required",
-          error: ""
-        }
-      }
+      loading: true,
+      orderForm: loginInputConstants
     };
+  }
+
+  componentDidMount() {
+    this.setState({
+      loading: false
+    });
   }
 
   onSubmitLogin = e => {
@@ -59,26 +43,28 @@ class Login extends Component {
     this.loginAction();
   };
 
-  componentWillMount() {
-    this.setState({
-      loading: true
-    });
-  }
-  componentDidMount() {
-    this.setState({
-      loading: false
-    });
-  }
+  loginAction = async () => {
+    try {
+      let success = await this.validateCredentials();
+      if (success) {
+        this.successfullLogin();
+      }
+    } catch (e) {
+      this.setState({
+        error: e,
+        loading: false
+      });
+    }
+  };
 
   validateCredentials = () => {
     return new Promise((resolve, reject) => {
-      fire
+      resolve(fire
         .auth()
         .signInWithEmailAndPassword(
           this.state.orderForm.email.value,
           this.state.orderForm.password.value
-        );
-      resolve(true);
+        ));
     });
   };
 
@@ -93,20 +79,6 @@ class Login extends Component {
     }
 
     this.props.history.push("/");
-  };
-
-  loginAction = async () => {
-    try {
-      let success = await this.validateCredentials();
-      if (success) {
-        this.successfullLogin();
-      }
-    } catch (e) {
-      this.setState({
-        error: e,
-        loading: false
-      });
-    }
   };
 
   inputChangedHandler = (event, inputIdentifier) => {
@@ -142,7 +114,7 @@ class Login extends Component {
         config: this.state.orderForm[key]
       });
     }
-    const { error, loading } = this.state;
+    let { error, loading } = this.state;
 
     let loginPage = (
       <form>
@@ -175,11 +147,10 @@ class Login extends Component {
         <button className="btn btn-success" onClick={this.onSubmitLogin}>
           Login
         </button>
-        <br />
-        or <br />
-        Do
+        <div className="clearfix" ></div>
+        <span>Don't have account, do</span>
         <Link to={"/register"}> Register </Link>
-        here.
+        <span>here.</span>
       </form>
     );
 
@@ -187,31 +158,17 @@ class Login extends Component {
       loginPage = <Spinner />;
     }
 
-    return <Fragment>{loginPage}</Fragment>;
+    return loginPage;
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    authState: state.authState
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
-    // onInputChange: e =>
-    //   dispatch({
-    //     type: "onChange",
-    //     name: e.target.name,
-    //     value: e.target.value
-    //   }),
     setIsAuthorised: status => dispatch({ type: "onSetAuthorise", status })
   };
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(Login);
-
-// export default Login;

@@ -114,6 +114,18 @@
   height: 0px;
 }
 
+.container-left {
+  width: 50%; float: left; 
+}
+
+.container-right {
+  width: 49%; float: left;
+}
+
+.back-link {
+  float: right; margin-right: 10px;
+}
+
 /* .active { 
   font-weight: "bold";
   color: "green";
@@ -174,6 +186,12 @@
 
 .margin-left-5 { 
   margin-left: 5px
+}
+
+.registerContainer {
+  width: 100%;
+  text-align: center;
+  align-content: center;
 }
 
 @keyframes App-logo-spin {

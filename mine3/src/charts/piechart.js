@@ -21,7 +21,7 @@ class CustomPieChart extends Component {
     };
   }
 
-  UNSAFE_componentWillMount = async () => {
+  componentDidMount = async () => {
     // Variable declaration
     let authorData = {};
     let authorsData = [];
@@ -99,14 +99,14 @@ class CustomPieChart extends Component {
       (this.state.loading) ?
         <Spinner /> :
         <div className="width-100">
-          <Link style={{ float: "right", marginRight: "10px" }} to={"/showpages"}>
+          <Link className="back-link" to={"/showpages"}>
             Back
-        </Link>
+          </Link>
 
           <div className="clearfix"></div>
 
           {/* For Pie Chart */}
-          <div className="container-left" style={{ width: "50%", float: "left" }}>
+          <div className="container-left" >
             <label className="width-100" htmlFor="pieChart">
               <strong>Pie Chart (Author): </strong>
             </label>
@@ -117,7 +117,7 @@ class CustomPieChart extends Component {
           </div>
 
           {/* For Donut Chart */}
-          <div className="container-right" style={{ width: "49%", float: "left" }}>
+          <div className="container-right" >
             <label className="width-100" htmlFor="pieChart">
               <strong>Donut Chart (Categories): </strong>
             </label>

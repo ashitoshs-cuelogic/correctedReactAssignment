@@ -5,54 +5,12 @@ import Spinner from "../UI/Spinner";
 import moment from "moment";
 import Input from "./../UI/Input/Input";
 import Validator from "validatorjs";
+import { pageInputConstants } from "../constants/inputConstants";
 
 const initialState = {
     error: "",
     loading: false,
-    orderForm: {
-        title: {
-            elementType: "input",
-            elementConfig: {
-                type: "text",
-                name: "title",
-                placeholder: "Title"
-            },
-            value: "",
-            rule: "required",
-            error: ""
-        },
-        content: {
-            elementType: "froalaEditor",
-            elementConfig: {
-                name: "content"
-            },
-            value: "",
-            rule: "required",
-            error: ""
-        },
-        status: {
-            elementType: "select",
-            elementConfig: {
-                options: [
-                    {
-                        value: "",
-                        displayValue: "Select Status"
-                    },
-                    {
-                        value: "published",
-                        displayValue: "Published"
-                    },
-                    {
-                        value: "on_Hold",
-                        displayValue: "On Hold"
-                    }
-                ]
-            },
-            value: "",
-            rule: "required",
-            error: ""
-        }
-    }
+    orderForm: pageInputConstants
 };
 
 class CreateOrEditpage extends Component {
@@ -245,31 +203,4 @@ class CreateOrEditpage extends Component {
     }
 }
 
-// const mapStateToProps = state => {
-//   return {
-//     pageState: state.authState
-//   };
-// };
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     onInputChange: e =>
-//       dispatch({
-//         type: "onChange",
-//         name: e.target.name,
-//         value: e.target.value
-//       }),
-//     onModelChange: model =>
-//       dispatch({
-//         type: "onChange",
-//         name: "content",
-//         value: model
-//       })
-//   };
-// };
-
 export default CreateOrEditpage;
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(Createpage);
