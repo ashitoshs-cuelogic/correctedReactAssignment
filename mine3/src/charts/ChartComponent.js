@@ -8,20 +8,8 @@ const charts = props => {
       {
         props.pages
           ? props.pages.map((entry, index) => (
-            <div
-              style={{
-                textAlign: "left",
-                width: "100%",
-                display: "inline",
-                // float: "left",
-                marginLeft: "60px",
-                color: COLORS[index]
-              }}
-              key={{ index }}
-            >
-              <span >
-                {index + 1}) {entry.name}: {entry.value ? entry.value : 0}
-              </span>
+            <div className="graph-label" style={{ color: COLORS[index] }} key={{ index }} >
+              <span >{index + 1}) {entry.name}: {entry.value ? entry.value : 0}</span>
             </div>
           ))
           : null

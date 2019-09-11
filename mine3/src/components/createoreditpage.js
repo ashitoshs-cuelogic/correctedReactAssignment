@@ -7,17 +7,17 @@ import Input from "./../UI/Input/Input";
 import Validator from "validatorjs";
 import { pageInputConstants } from "../constants/inputConstants";
 
-const initialState = {
-    error: "",
-    loading: false,
-    orderForm: pageInputConstants
-};
-
 class CreateOrEditpage extends Component {
     constructor(props) {
         super(props);
-        this.state = initialState;
+        this.state = {
+            error: "",
+            loading: false,
+            orderForm: pageInputConstants,
+            validUser: false
+        };
         this.onSubmitCreateOrUpdatepage = this.onSubmitCreateOrUpdatepage.bind();
+        this.authorization();
     }
 
     onSubmitCreateOrUpdatepage = e => {
@@ -55,12 +55,31 @@ class CreateOrEditpage extends Component {
         }
     };
 
-    authorization = () => {
+    authorization = async () => {
         let userData = sessionStorage.getItem("authUser");
         if (userData) {
-            return true;
+            let usersData = await this.validateUser();
+            if (usersData) {
+                let boolStatus = false;
+                usersData.forEach(function (user) {
+                    let userEmail = user.val().email;
+                    if (userEmail === userData) {
+                        boolStatus = true;
+                    }
+                });
+                this.setState({ validUser: boolStatus })
+            }
         }
         return false;
+    }
+
+    validateUser() {
+        return new Promise((resolve, reject) => {
+            let playersRef = fire.database().ref("users/");
+            playersRef.orderByValue().on("value", function (users) {
+                resolve(users);
+            });
+        });
     }
 
     createOrUpdatePageData() {
@@ -143,11 +162,7 @@ class CreateOrEditpage extends Component {
             });
         }
 
-        if (!this.authorization()) {
-            return (<h6><h1 className="error">Access Denied</h1>Error: 401 Unauthorized user trying to access <code>{this.props.location.pathname}</code></h6>);
-        }
-
-        if (!this.authorization()) {
+        if (!this.state.validUser) {
             return (<h6><h1 className="error">Access Denied</h1>Error: 401 Unauthorized user trying to access <code>{this.props.location.pathname}</code></h6>);
         }
 

@@ -17,8 +17,10 @@ class CustomPieChart extends Component {
           innerRadius: 60
         }
       },
-      loading: true
+      loading: true,
+      validUser: false
     };
+    this.authorization();
   }
 
   componentDidMount = async () => {
@@ -81,17 +83,35 @@ class CustomPieChart extends Component {
     });
   }
 
-  authorization = () => {
+  authorization = async () => {
     let userData = sessionStorage.getItem("authUser");
     if (userData) {
-      return true;
+      let usersData = await this.validateUser();
+      if (usersData) {
+        let boolStatus = false;
+        usersData.forEach(function (user) {
+          let userEmail = user.val().email;
+          if (userEmail === userData) {
+            boolStatus = true;
+          }
+        });
+        this.setState({ validUser: boolStatus })
+      }
     }
     return false;
   }
 
+  validateUser() {
+    return new Promise((resolve, reject) => {
+      let playersRef = fire.database().ref("users/");
+      playersRef.orderByValue().on("value", function (users) {
+        resolve(users);
+      });
+    });
+  }
+
   render() {
-    // Authorization before loading the page content
-    if (!this.authorization()) {
+    if (!this.state.validUser) {
       return (<h6><h1 className="error">Access Denied</h1>Error: 401 Unauthorized user trying to access <code>{this.props.location.pathname}</code></h6>);
     }
 

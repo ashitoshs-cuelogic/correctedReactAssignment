@@ -76,27 +76,13 @@ class MenuBar extends Component {
         <div className="navbar-collapse menubar-div">
           <ul className="menubar-ul" key="HomeUl">
             <li className="menubar-li float-left" key="Home">
-              <NavLink
-                className="nav-link"
-                to="/"
-                exact
-                activeStyle={ActiveStyle}
-                title="Home"
-              >
+              <NavLink className="nav-link" to="/" exact activeStyle={ActiveStyle} title="Home" >
                 <i className="fa fa-home" aria-hidden="true" />
               </NavLink>
             </li>
             {sources.map(page => (
-              <li
-                className="menubar-li border-left-grey float-left"
-                key={page.title}
-              >
-                <NavLink
-                  className="nav-link"
-                  to={"/preview/" + page.title}
-                  exact
-                  activeStyle={ActiveStyle}
-                >
+              <li className="menubar-li border-left-grey float-left" key={page.title} >
+                <NavLink className="nav-link" to={"/preview/" + page.title} exact activeStyle={ActiveStyle} >
                   <span className="glyphicon glyphicon-home" />
                   {page.title}
                 </NavLink>
@@ -106,57 +92,28 @@ class MenuBar extends Component {
             {loggedInUser ? (
               <div>
                 <li className="display-inline float-right" key="/">
-                  <NavLink
-                    className="nav-link "
-                    onClick={this.logoutHandler}
-                    to="/login"
-                    exact
-                    title="Logout"
-                    activeStyle={ActiveStyle}
-                  >
+                  <NavLink className="nav-link " onClick={this.logoutHandler} to="/login" exact title="Logout" activeStyle={ActiveStyle} >
                     <i className="fa fa-sign-out" aria-hidden="true" />
                   </NavLink>
                 </li>
 
-                <li
-                  className="display-inline float-right border-right-grey"
-                  key="showpages"
-                >
-                  <NavLink
-                    className="nav-link "
-                    to="/showpages"
-                    exact
-                    activeStyle={ActiveStyle}
-                    title="Manage Pages"
-                  >
+                <li className="display-inline float-right border-right-grey" key="showpages" >
+                  <NavLink className="nav-link " to="/showpages" exact activeStyle={ActiveStyle} title="Manage Pages" >
                     <i className="fa fa-gear" aria-hidden="true" /> Manage Pages
-                </NavLink>
+                  </NavLink>
                 </li>
               </div>
             ) : (
                 <div>
                   <li className="display-inline float-right" key="login">
-                    <NavLink
-                      className="nav-link "
-                      to="/login"
-                      exact
-                      activeStyle={ActiveStyle}
-                    >
+                    <NavLink className="nav-link " to="/login" exact activeStyle={ActiveStyle} >
                       Login
-                </NavLink>
+                    </NavLink>
                   </li>
-                  <li
-                    className="display-inline float-right border-right-grey"
-                    key="register"
-                  >
-                    <NavLink
-                      className="nav-link "
-                      to="/register"
-                      exact
-                      activeStyle={ActiveStyle}
-                    >
+                  <li className="display-inline float-right border-right-grey" key="register">
+                    <NavLink className="nav-link " to="/register" exact activeStyle={ActiveStyle}>
                       Register
-                </NavLink>
+                    </NavLink>
                   </li>
                 </div>
               )}
